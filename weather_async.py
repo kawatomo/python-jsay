@@ -6,6 +6,8 @@ import requests
 import asyncio
 import aiohttp
 
+import jsay
+
 async def fetch(session, url, payload):
     with aiohttp.Timeout(10):
         async with session.get(url, params=payload) as response:
@@ -19,5 +21,7 @@ if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     with aiohttp.ClientSession(loop=loop) as session:
         json = loop.run_until_complete(fetch(session, url, payload))
-        print(json['description']['text'].replace('\n','').replace('\r',''))
-    
+        text = json['description']['text']
+        speech = text.replace('\n','').replace('\r','').replace(' ','')
+        #print(speech)
+        jsay.execute(speech)
